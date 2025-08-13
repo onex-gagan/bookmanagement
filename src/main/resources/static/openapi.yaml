@@ -1,0 +1,345 @@
+openapi: 3.0.3
+info:
+  title: Library Management API
+  version: 1.0.0
+  description: API for managing users, books, and book prices.
+
+tags:
+  - name: Users
+    description: Operations related to users
+  - name: Books
+    description: Operations related to books
+  - name: Prices
+    description: Operations related to book prices
+
+servers:
+  - url: http://localhost:8080/api
+    description: Local development server
+
+paths:
+  /users:
+    get:
+      tags: [Users]
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags: [Users]
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    get:
+      tags: [Users]
+      summary: Get user by ID
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags: [Users]
+      summary: Update user
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags: [Users]
+      summary: Delete user
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '204':
+          description: User deleted
+
+  /books:
+    get:
+      tags: [Books]
+      summary: Get all books
+      responses:
+        '200':
+          description: List of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      tags: [Books]
+      summary: Create a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookCreateRequest'
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /books/{bookId}:
+    get:
+      tags: [Books]
+      summary: Get book by ID
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    put:
+      tags: [Books]
+      summary: Update book
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookUpdateRequest'
+      responses:
+        '200':
+          description: Book updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    delete:
+      tags: [Books]
+      summary: Delete book
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '204':
+          description: Book deleted
+
+  /prices:
+    get:
+      tags: [Prices]
+      summary: Get all prices
+      responses:
+        '200':
+          description: List of prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+    post:
+      tags: [Prices]
+      summary: Create a new price entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceCreateRequest'
+      responses:
+        '201':
+          description: Price entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+
+  /prices/{priceId}:
+    get:
+      tags: [Prices]
+      summary: Get price by ID
+      parameters:
+        - $ref: '#/components/parameters/PriceId'
+      responses:
+        '200':
+          description: Price details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+    put:
+      tags: [Prices]
+      summary: Update price
+      parameters:
+        - $ref: '#/components/parameters/PriceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceUpdateRequest'
+      responses:
+        '200':
+          description: Price updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Price'
+    delete:
+      tags: [Prices]
+      summary: Delete price
+      parameters:
+        - $ref: '#/components/parameters/PriceId'
+      responses:
+        '204':
+          description: Price deleted
+
+components:
+  parameters:
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: integer
+        description: Unique identifier of the user
+    BookId:
+      name: bookId
+      in: path
+      required: true
+      schema:
+        type: integer
+        description: Unique identifier of the book
+    PriceId:
+      name: priceId
+      in: path
+      required: true
+      schema:
+        type: integer
+        description: Unique identifier of the price entry
+
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: Full name of the user
+        phone:
+          type: string
+          description: Contact phone number
+        address:
+          type: string
+          description: Residential address
+        email:
+          type: string
+          description: Email address
+      required: [user_id, name, phone, email]
+    UserCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+      required: [name, phone, email]
+    UserUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/UserCreateRequest'
+
+    Book:
+      type: object
+      properties:
+        book_id:
+          type: integer
+          description: Unique identifier for the book
+        bookName:
+          type: string
+          description: Title of the book
+        user_id:
+          type: integer
+          description: ID of the user who borrowed the book
+        price_id:
+          type: integer
+          description: ID referencing the book's price entry
+        author:
+          type: string
+          description: Author of the book
+      required: [book_id, bookName, user_id, price_id, author]
+    BookCreateRequest:
+      type: object
+      properties:
+        bookName:
+          type: string
+        user_id:
+          type: integer
+        price_id:
+          type: integer
+        author:
+          type: string
+      required: [bookName, user_id, price_id, author]
+    BookUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/BookCreateRequest'
+
+    Price:
+      type: object
+      properties:
+        price_id:
+          type: integer
+          description: Unique identifier for the price entry
+        price:
+          type: number
+          format: float
+          description: Price value of the book
+      required: [price_id, price]
+    PriceCreateRequest:
+      type: object
+      properties:
+        price:
+          type: number
+          format: float
+      required: [price]
+    PriceUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/PriceCreateRequest'
