@@ -16,4 +16,20 @@ public class UserService {
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public UserEntity saveUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
+    }
+
+    public UserEntity getUserById(Integer userId) {
+        return userRepository.findById(userId.longValue()).orElse(null);
+    }
+
+    public void deleteUserById(Integer userId) {
+        UserEntity userEntity = getUserById(userId);
+        if (userEntity != null) {
+            userRepository.delete(userEntity);
+        }
+    }
+
 }

@@ -1,7 +1,10 @@
 package org.example.bookmanagement.mapper;
 
 import org.example.bookmanagement.entity.BookEntity;
+import org.example.bookmanagement.entity.PriceEntity;
+import org.example.bookmanagement.entity.UserEntity;
 import org.example.bookmanagement.model.Book;
+import org.example.bookmanagement.model.BookCreateRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,4 +34,17 @@ public class BookMapper {
                 .map(BookMapper::toApiBook)
                 .collect(Collectors.toList());
     }
+
+    public static BookEntity toEntity(BookCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        BookEntity entity = new BookEntity();
+        entity.setTitle(request.getBookName());
+        entity.setAuthor(request.getAuthor());
+
+        return entity;
+    }
+
 }

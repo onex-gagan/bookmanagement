@@ -134,7 +134,7 @@
                                 ${project.basedir}/src/main/resources/static/openapi.yaml
                             </inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>org.example.bookmanagement.api</apiPackage>
+                            <apiPackage>org.example.bookmanagement.delegate</apiPackage>
                             <modelPackage>org.example.bookmanagement.model</modelPackage>
                             <configOptions>
                                 <delegatePattern>true</delegatePattern>

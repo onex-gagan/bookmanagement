@@ -1,4 +1,4 @@
-package org.example.bookmanagement.api;
+package org.example.bookmanagement.delegate;
 
 import lombok.RequiredArgsConstructor;
 import org.example.bookmanagement.entity.PriceEntity;

@@ -2,6 +2,8 @@ package org.example.bookmanagement.mapper;
 
 import org.example.bookmanagement.entity.UserEntity;
 import org.example.bookmanagement.model.User;
+import org.example.bookmanagement.model.UserUpdateRequest;
+import org.example.bookmanagement.model.UserCreateRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,4 +28,29 @@ public class UserMapper {
                 .map(UserMapper::toApiUser)
                 .collect(Collectors.toList());
     }
+
+    public static UserEntity toEntity(UserCreateRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        UserEntity entity = new UserEntity();
+        entity.setName(request.getName());
+        entity.setPhone(request.getPhone());
+        entity.setAddress(request.getAddress());
+        entity.setEmail(request.getEmail());
+
+        // Skipping borrowedBooks for simplicity
+        return entity;
+    }
+
+    public static void updateEntityFromRequest(UserEntity entity, UserUpdateRequest request) {
+        if (request.getName() != null) entity.setName(request.getName());
+        if (request.getEmail() != null) entity.setEmail(request.getEmail());
+        if (request.getPhone() != null) entity.setPhone(request.getPhone());
+        if (request.getAddress() != null) entity.setAddress(request.getAddress());
+    }
+
+
+
 }

@@ -16,4 +16,9 @@ public class PriceService {
     public List<PriceEntity> getAllPrices() {
         return priceRepository.findAll();
     }
+
+    public PriceEntity getPriceById(Long id) {
+        return priceRepository.findById(id).orElse(null);
+    }
+
 }
