@@ -10,9 +10,14 @@ import java.util.stream.Collectors;
 
 public class UserMapper {
 
-    public static User toApiUser(UserEntity entity) {
-        User apiUser = new User();
+    private UserMapper() {
+        // Private constructor to prevent instantiation
+    }
 
+    public static User toApiUser(UserEntity entity) {
+        if (entity == null) return null;
+
+        User apiUser = new User();
         apiUser.setUserId(entity.getId() != null ? entity.getId().intValue() : null);
         apiUser.setName(entity.getName());
         apiUser.setPhone(entity.getPhone());
@@ -30,18 +35,14 @@ public class UserMapper {
     }
 
     public static UserEntity toEntity(UserCreateRequest request) {
-        if (request == null) {
-            return null;
-        }
+        if (request == null) return null;
 
-        UserEntity entity = new UserEntity();
-        entity.setName(request.getName());
-        entity.setPhone(request.getPhone());
-        entity.setAddress(request.getAddress());
-        entity.setEmail(request.getEmail());
-
-        // Skipping borrowedBooks for simplicity
-        return entity;
+        return UserEntity.builder()
+                .name(request.getName())
+                .phone(request.getPhone())
+                .address(request.getAddress())
+                .email(request.getEmail())
+                .build();
     }
 
     public static void updateEntityFromRequest(UserEntity entity, UserUpdateRequest request) {
@@ -50,7 +51,4 @@ public class UserMapper {
         if (request.getPhone() != null) entity.setPhone(request.getPhone());
         if (request.getAddress() != null) entity.setAddress(request.getAddress());
     }
-
-
-
 }

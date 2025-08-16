@@ -27,46 +27,29 @@ public class UsersApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<User> usersPost(UserCreateRequest userCreateRequest) {
         if (userCreateRequest == null) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("UserCreateRequest cannot be null");
         }
 
-        // 1. Map request to entity
         UserEntity userEntity = UserMapper.toEntity(userCreateRequest);
-
-        // 2. Save entity
         UserEntity savedUser = userService.saveUser(userEntity);
 
-        // 3. Map saved entity to API model
-        User apiUser = UserMapper.toApiUser(savedUser);
-
-        // 4. Return with 201 Created
-        return ResponseEntity.status(201).body(apiUser);
+        return ResponseEntity.status(201).body(UserMapper.toApiUser(savedUser));
     }
 
     @Override
-    public ResponseEntity<User>usersUserIdGet(Integer userId) {
+    public ResponseEntity<User> usersUserIdGet(Integer userId) {
         if (userId == null) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("UserId cannot be null");
         }
 
         UserEntity userEntity = userService.getUserById(userId);
-        if (userEntity == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        User apiUser = UserMapper.toApiUser(userEntity);
-        return ResponseEntity.ok(apiUser);
+        return ResponseEntity.ok(UserMapper.toApiUser(userEntity));
     }
 
     @Override
     public ResponseEntity<Void> usersUserIdDelete(Integer userId) {
         if (userId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        UserEntity userEntity = userService.getUserById(userId);
-        if (userEntity == null) {
-            return ResponseEntity.notFound().build();
+            throw new IllegalArgumentException("UserId cannot be null");
         }
 
         userService.deleteUserById(userId);
@@ -76,26 +59,13 @@ public class UsersApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<User> usersUserIdPut(Integer userId, UserUpdateRequest userUpdateRequest) {
         if (userId == null || userUpdateRequest == null) {
-            return ResponseEntity.badRequest().build();
+            throw new IllegalArgumentException("UserId or UserUpdateRequest cannot be null");
         }
 
-        // 1. Fetch existing entity
         UserEntity existingUser = userService.getUserById(userId);
-        if (existingUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // 2. Update fields from request
         UserMapper.updateEntityFromRequest(existingUser, userUpdateRequest);
-
-        // 3. Save updated entity
         UserEntity updatedUser = userService.saveUser(existingUser);
 
-        // 4. Map to API model
-        User apiUser = UserMapper.toApiUser(updatedUser);
-
-        return ResponseEntity.ok(apiUser);
+        return ResponseEntity.ok(UserMapper.toApiUser(updatedUser));
     }
-
-
 }

@@ -2,6 +2,7 @@ package org.example.bookmanagement.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.bookmanagement.entity.UserEntity;
+import org.example.bookmanagement.exception.ResourceNotFoundException;
 import org.example.bookmanagement.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +23,12 @@ public class UserService {
     }
 
     public UserEntity getUserById(Integer userId) {
-        return userRepository.findById(userId.longValue()).orElse(null);
+        return userRepository.findById(userId.longValue())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
     }
 
     public void deleteUserById(Integer userId) {
         UserEntity userEntity = getUserById(userId);
-        if (userEntity != null) {
-            userRepository.delete(userEntity);
-        }
+        userRepository.delete(userEntity);
     }
-
 }

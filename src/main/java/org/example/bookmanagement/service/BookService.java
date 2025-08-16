@@ -5,14 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.bookmanagement.entity.BookEntity;
 import org.example.bookmanagement.entity.UserEntity;
 import org.example.bookmanagement.entity.PriceEntity;
-import org.example.bookmanagement.model.Book;
 import org.example.bookmanagement.model.BookUpdateRequest;
 import org.example.bookmanagement.repository.BookRepository;
 import org.example.bookmanagement.repository.UserRepository;
 import org.example.bookmanagement.repository.PriceRepository;
-import org.example.bookmanagement.service.UserService;
-import org.example.bookmanagement.service.PriceService;
 import org.springframework.stereotype.Service;
+import org.example.bookmanagement.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-    private  final PriceRepository priceRepository;
+    private final PriceRepository priceRepository;
     private final UserService userService;
     private final PriceService priceService;
 
@@ -32,35 +30,36 @@ public class BookService {
 
     public BookEntity getBookById(long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
     }
 
     @Transactional
     public BookEntity saveBook(BookEntity bookEntity, Long userId, Long priceId) {
         if (userId != null) {
             UserEntity user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
             bookEntity.setUser(user);
         }
 
         if (priceId != null) {
             PriceEntity price = priceRepository.findById(priceId)
-                    .orElseThrow(() -> new RuntimeException("Price not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Price not found with id: " + priceId));
             bookEntity.setPrice(price);
         }
 
         return bookRepository.save(bookEntity);
     }
 
-    public boolean deleteBook(long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            return true;
+    public void deleteBook(long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Book not found with id: " + id);
         }
-        return false;
+        bookRepository.deleteById(id);
     }
 
-    public BookEntity updateBook(BookEntity existingBook, BookUpdateRequest request) {
+    public BookEntity updateBook(long bookId, BookUpdateRequest request) {
+        BookEntity existingBook = getBookById(bookId);
+
         if (request.getBookName() != null) {
             existingBook.setTitle(request.getBookName());
         }
@@ -69,19 +68,13 @@ public class BookService {
         }
         if (request.getUserId() != null) {
             UserEntity user = userService.getUserById(request.getUserId());
-            if (user != null) {
-                existingBook.setUser(user);
-            }
+            existingBook.setUser(user);
         }
         if (request.getPriceId() != null) {
             PriceEntity price = priceService.getPriceById(request.getPriceId().longValue());
-            if (price != null) {
-                existingBook.setPrice(price);
-            }
+            existingBook.setPrice(price);
         }
+
         return bookRepository.save(existingBook);
     }
-
-
-
 }

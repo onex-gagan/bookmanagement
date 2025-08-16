@@ -1,8 +1,6 @@
 package org.example.bookmanagement.mapper;
 
 import org.example.bookmanagement.entity.BookEntity;
-import org.example.bookmanagement.entity.PriceEntity;
-import org.example.bookmanagement.entity.UserEntity;
 import org.example.bookmanagement.model.Book;
 import org.example.bookmanagement.model.BookCreateRequest;
 
@@ -12,18 +10,21 @@ import java.util.stream.Collectors;
 public class BookMapper {
 
     public static Book toApiBook(BookEntity entity) {
-        Book apiBook = new Book();
+        if (entity == null) {
+            return null;
+        }
 
+        Book apiBook = new Book();
         apiBook.setBookId(entity.getId() != null ? entity.getId().intValue() : null);
         apiBook.setBookName(entity.getTitle());
         apiBook.setAuthor(entity.getAuthor());
 
-        if (entity.getUser() != null && entity.getUser().getId() != null) {
-            apiBook.setUserId(entity.getUser().getId().intValue());
+        if (entity.getUser() != null) {
+            apiBook.setUserId(entity.getUser().getId() != null ? entity.getUser().getId().intValue() : null);
         }
 
-        if (entity.getPrice() != null && entity.getPrice().getId() != null) {
-            apiBook.setPriceId(entity.getPrice().getId().intValue());
+        if (entity.getPrice() != null) {
+            apiBook.setPriceId(entity.getPrice().getId() != null ? entity.getPrice().getId().intValue() : null);
         }
 
         return apiBook;
@@ -39,12 +40,9 @@ public class BookMapper {
         if (request == null) {
             return null;
         }
-
-        BookEntity entity = new BookEntity();
-        entity.setTitle(request.getBookName());
-        entity.setAuthor(request.getAuthor());
-
-        return entity;
+        return BookEntity.builder()
+                .title(request.getBookName())
+                .author(request.getAuthor())
+                .build();
     }
-
 }

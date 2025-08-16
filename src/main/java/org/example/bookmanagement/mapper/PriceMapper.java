@@ -1,10 +1,8 @@
 package org.example.bookmanagement.mapper;
 import org.example.bookmanagement.entity.PriceEntity;
-import org.example.bookmanagement.entity.UserEntity;
 import org.example.bookmanagement.model.Price;
 import org.example.bookmanagement.model.PriceCreateRequest;
 import org.example.bookmanagement.model.PriceUpdateRequest;
-import org.example.bookmanagement.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

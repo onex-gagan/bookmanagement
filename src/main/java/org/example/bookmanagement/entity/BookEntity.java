@@ -19,11 +19,12 @@ public class BookEntity {
 
     private String author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user; // Only one user can borrow at a time
+    private UserEntity user; // one user can borrow
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id", referencedColumnName = "id")
     private PriceEntity price;
 }
+

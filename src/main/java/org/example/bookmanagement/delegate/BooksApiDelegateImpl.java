@@ -8,9 +8,7 @@ import org.example.bookmanagement.mapper.BookMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-
 
 @Component
 @RequiredArgsConstructor
@@ -19,55 +17,38 @@ public class BooksApiDelegateImpl implements BooksApiDelegate {
     private final BookService bookService;
 
     @Override
-    public ResponseEntity<List<Book>> booksGet(){
-        List<BookEntity> books = bookService.getAllBooks();
-        return ResponseEntity.ok(BookMapper.toApiBookList(books));
+    public ResponseEntity<List<Book>> booksGet() {
+        return ResponseEntity.ok(
+                BookMapper.toApiBookList(bookService.getAllBooks())
+        );
     }
 
     @Override
-    public ResponseEntity<Book>booksBookIdGet(Integer bookId) {
-        BookEntity bookEntity = bookService.getBookById(bookId);
-        if (bookEntity != null) {
-            return ResponseEntity.ok(BookMapper.toApiBook(bookEntity));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Book> booksBookIdGet(Integer bookId) {
+        BookEntity bookEntity = bookService.getBookById(bookId.longValue());
+        return ResponseEntity.ok(BookMapper.toApiBook(bookEntity));
     }
 
     @Override
-    public ResponseEntity<Book> booksPost(BookCreateRequest bookCreateRequest) {
-        BookEntity bookEntity = BookMapper.toEntity(bookCreateRequest);
-
+    public ResponseEntity<Book> booksPost(BookCreateRequest request) {
+        BookEntity bookEntity = BookMapper.toEntity(request);
         BookEntity savedBook = bookService.saveBook(
                 bookEntity,
-                bookCreateRequest.getUserId() != null ? bookCreateRequest.getUserId().longValue() : null,
-                bookCreateRequest.getPriceId() != null ? bookCreateRequest.getPriceId().longValue() : null
+                request.getUserId() != null ? request.getUserId().longValue() : null,
+                request.getPriceId() != null ? request.getPriceId().longValue() : null
         );
-
         return ResponseEntity.status(201).body(BookMapper.toApiBook(savedBook));
     }
 
     @Override
     public ResponseEntity<Void> booksBookIdDelete(Integer bookId) {
-        boolean deleted = bookService.deleteBook(bookId);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        bookService.deleteBook(bookId.longValue());
+        return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<Book> booksBookIdPut(Integer bookId, BookUpdateRequest bookUpdateRequest) {
-        BookEntity bookEntity = bookService.getBookById(bookId);
-
-        if (bookEntity == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        BookEntity updatedBook = bookService.updateBook(bookEntity, bookUpdateRequest);
-
+    public ResponseEntity<Book> booksBookIdPut(Integer bookId, BookUpdateRequest request) {
+        BookEntity updatedBook = bookService.updateBook(bookId.longValue(), request);
         return ResponseEntity.ok(BookMapper.toApiBook(updatedBook));
     }
-
 }
