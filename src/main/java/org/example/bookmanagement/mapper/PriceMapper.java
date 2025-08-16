@@ -1,4 +1,5 @@
 package org.example.bookmanagement.mapper;
+
 import org.example.bookmanagement.entity.PriceEntity;
 import org.example.bookmanagement.model.Price;
 import org.example.bookmanagement.model.PriceCreateRequest;
@@ -8,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PriceMapper {
+
     public static Price toApiPrice(PriceEntity entity) {
+        if (entity == null) return null;
+
         Price apiPrice = new Price();
-
-        apiPrice.setPriceId(entity.getId().intValue());
-        apiPrice.setPrice(entity.getPrice().floatValue());
-
-        // Skipping borrowedBooks for simplicity
+        apiPrice.setPriceId(entity.getId() != null ? entity.getId().intValue() : null);
+        apiPrice.setPrice(entity.getPrice() != null ? entity.getPrice().floatValue() : null);
         return apiPrice;
     }
 
@@ -24,19 +25,17 @@ public class PriceMapper {
                 .collect(Collectors.toList());
     }
 
-    public  static PriceEntity toEntity(PriceCreateRequest priceCreateRequest) {
-        if (priceCreateRequest == null) {
-            return null;
-        }
+    public static PriceEntity toEntity(PriceCreateRequest request) {
+        if (request == null) return null;
 
-        PriceEntity priceEntity = new PriceEntity();
-        priceEntity.setPrice(priceCreateRequest.getPrice().doubleValue());
-
-        // Skipping borrowedBooks for simplicity
-        return priceEntity;
+        return PriceEntity.builder()
+                .price(request.getPrice() != null ? request.getPrice().doubleValue() : null)
+                .build();
     }
 
     public static void updateEntityFromRequest(PriceEntity entity, PriceUpdateRequest request) {
-        if (request.getPrice() != null) entity.setPrice(request.getPrice().doubleValue());
+        if (request.getPrice() != null) {
+            entity.setPrice(request.getPrice().doubleValue());
+        }
     }
 }

@@ -5,16 +5,18 @@ import lombok.*;
 
 @Entity
 @Table(name = "prices")
-@Data // Generates getters, setters, toString, equals, hashCode
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PriceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double price;
+    private Double price; // Consider BigDecimal for money fields
 
     @OneToOne(mappedBy = "price")
     private BookEntity book;
