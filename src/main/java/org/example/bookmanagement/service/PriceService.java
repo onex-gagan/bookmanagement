@@ -21,4 +21,23 @@ public class PriceService {
         return priceRepository.findById(id).orElse(null);
     }
 
+    public PriceEntity updatePrice(PriceEntity priceEntity){
+        if (priceEntity == null || priceEntity.getId() == null) {
+            return null; // or throw an exception
+        }
+        return priceRepository.save(priceEntity);
+    }
+
+    public boolean deletePrice(Long id) {
+        if (priceRepository.existsById(id)) {
+            priceRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public PriceEntity createPrice(PriceEntity priceEntity) {
+        return priceRepository.save(priceEntity);
+    }
+
 }
