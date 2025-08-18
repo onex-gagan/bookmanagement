@@ -16,7 +16,7 @@ public class PriceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double price; // Consider BigDecimal for money fields
+    private Double price;
 
     @OneToOne(mappedBy = "price")
     private BookEntity book;
