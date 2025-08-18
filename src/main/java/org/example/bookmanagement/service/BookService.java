@@ -60,20 +60,13 @@ public class BookService {
     public BookEntity updateBook(long bookId, BookUpdateRequest request) {
         BookEntity existingBook = getBookById(bookId);
 
-        if (request.getBookName() != null) {
-            existingBook.setTitle(request.getBookName());
-        }
-        if (request.getAuthor() != null) {
-            existingBook.setAuthor(request.getAuthor());
-        }
-        if (request.getUserId() != null) {
-            UserEntity user = userService.getUserById(request.getUserId());
-            existingBook.setUser(user);
-        }
-        if (request.getPriceId() != null) {
-            PriceEntity price = priceService.getPriceById(request.getPriceId().longValue());
-            existingBook.setPrice(price);
-        }
+        existingBook.setTitle(request.getBookName());
+        existingBook.setAuthor(request.getAuthor());
+        UserEntity user = userService.getUserById(request.getUserId());
+        existingBook.setUser(user);
+        PriceEntity price = priceService.getPriceById(request.getPriceId().longValue());
+        existingBook.setPrice(price);
+
 
         return bookRepository.save(existingBook);
     }
