@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 public class BookMapper {
 
+    private BookMapper() {}
     public static Book toApiBook(BookEntity entity) {
         if (entity == null) {
             return null;

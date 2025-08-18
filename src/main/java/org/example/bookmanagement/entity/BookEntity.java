@@ -21,7 +21,7 @@ public class BookEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UserEntity user; // one user can borrow
+    private UserEntity user;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_id", referencedColumnName = "id")

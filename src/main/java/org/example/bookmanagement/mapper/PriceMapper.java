@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class PriceMapper {
 
+    private PriceMapper() {
+        // Private constructor to prevent instantiation
+    }
     public static Price toApiPrice(PriceEntity entity) {
         if (entity == null) return null;
 
