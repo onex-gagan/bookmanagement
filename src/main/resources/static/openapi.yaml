@@ -87,6 +87,20 @@ paths:
         '204':
           description: User deleted
 
+  /users/with-borrowed-books:
+    get:
+      tags: [Users]
+      summary: Get all users with their borrowed books
+      responses:
+        '200':
+          description: List of users with borrowed books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWithBorrowedBooks'
+
   /books:
     get:
       tags: [Books]
@@ -271,6 +285,7 @@ components:
           type: string
           description: Email address
       required: [user_id, name, phone, email]
+
     UserCreateRequest:
       type: object
       properties:
@@ -283,9 +298,30 @@ components:
         email:
           type: string
       required: [name, phone, email]
+
     UserUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/UserCreateRequest'
+
+    UserWithBorrowedBooks:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: Unique identifier for the user
+        name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+        borrowedBooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+      required: [user_id, name, phone, email]
 
     Book:
       type: object
@@ -299,13 +335,21 @@ components:
         user_id:
           type: integer
           description: ID of the user who borrowed the book
+        borrowedBy:
+          type: string
+          description: Name of the user who borrowed the book
         price_id:
           type: integer
           description: ID referencing the book's price entry
+        price:
+          type: number
+          format: float
+          description: Price value of the book
         author:
           type: string
           description: Author of the book
       required: [book_id, bookName, user_id, price_id, author]
+
     BookCreateRequest:
       type: object
       properties:
@@ -318,6 +362,7 @@ components:
         author:
           type: string
       required: [bookName, user_id, price_id, author]
+
     BookUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/BookCreateRequest'
@@ -333,6 +378,7 @@ components:
           format: float
           description: Price value of the book
       required: [price_id, price]
+
     PriceCreateRequest:
       type: object
       properties:
@@ -340,6 +386,7 @@ components:
           type: number
           format: float
       required: [price]
+
     PriceUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/PriceCreateRequest'

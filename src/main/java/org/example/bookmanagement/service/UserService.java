@@ -18,6 +18,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<UserEntity> getAllUsersWithBooks() {
+        return userRepository.findAll();
+    }
+
     public UserEntity saveUser(UserEntity userEntity) {
         return userRepository.save(userEntity);
     }

@@ -22,10 +22,12 @@ public class BookMapper {
 
         if (entity.getUser() != null) {
             apiBook.setUserId(entity.getUser().getId() != null ? entity.getUser().getId().intValue() : null);
+            apiBook.setBorrowedBy(entity.getUser().getName());
         }
 
         if (entity.getPrice() != null) {
             apiBook.setPriceId(entity.getPrice().getId() != null ? entity.getPrice().getId().intValue() : null);
+            apiBook.setPrice(entity.getPrice().getPrice().floatValue());
         }
 
         return apiBook;
