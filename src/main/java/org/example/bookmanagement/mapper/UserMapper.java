@@ -46,9 +46,9 @@ public class UserMapper {
     }
 
     public static void updateEntityFromRequest(UserEntity entity, UserUpdateRequest request) {
-        if (request.getName() != null) entity.setName(request.getName());
-        if (request.getEmail() != null) entity.setEmail(request.getEmail());
-        if (request.getPhone() != null) entity.setPhone(request.getPhone());
-        if (request.getAddress() != null) entity.setAddress(request.getAddress());
+        entity.setName(request.getName());
+        entity.setEmail(request.getEmail());
+        entity.setPhone(request.getPhone());
+        entity.setAddress(request.getAddress());
     }
 }
